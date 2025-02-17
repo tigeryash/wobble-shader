@@ -6,11 +6,11 @@ import vertexShader from "./shaders/wobble/vertex.glsl";
 import CustomShaderMaterial from "three-custom-shader-material";
 import CustomShaderMaterialVanilla from "three-custom-shader-material/vanilla";
 import * as THREE from "three";
-import hdrFile from "./public/urban_alley_01_1k.hdr";
+import hdrFile from "/urban_alley_01_1k.hdr";
 // import { mergeVertices } from "three/examples/jsm/utils/BufferGeometryUtils.js";
 import { useControls } from "leva";
 import { useFrame } from "@react-three/fiber";
-import suzanne from "./public/suzanne.glb";
+import suzanne from "/suzanne.glb";
 
 // const geometry = (() => {
 //   let geo = new THREE.IcosahedronGeometry(2.5, 50);
@@ -113,7 +113,7 @@ function App() {
         baseMaterial: THREE.MeshDepthMaterial,
         vertexShader,
         uniforms: uniforms,
-        depthPacking: THREE.RGBADepthPacking,
+        depthPacking: THREE.RGBADepthPacking, //the purpose of this is to store the depth in the alpha channel of the color
       }),
     [uniforms]
   );

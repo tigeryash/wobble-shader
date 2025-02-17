@@ -28,5 +28,5 @@
       "*": ["*", "*.glsl"]
     }
   },
-  "include": ["src/**/*", "src/types/**/*"]
+  "include": ["src/**/*", "src/types/**/*", "public"]
 }
