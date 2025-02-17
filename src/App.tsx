@@ -1,6 +1,6 @@
 import { Environment, OrbitControls, useGLTF } from "@react-three/drei";
 import { Perf } from "r3f-perf";
-import { useMemo, useRef } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import fragmentShader from "./shaders/wobble/fragment.glsl";
 import vertexShader from "./shaders/wobble/vertex.glsl";
 import CustomShaderMaterial from "three-custom-shader-material";
@@ -38,14 +38,13 @@ function App() {
   );
 
   const {
-    color,
     metalness,
     roughness,
-    // ior,
-    // thickness,
+    ior,
+    thickness,
     transparent,
     wireframe,
-    // transmission,
+    transmission,
   } = useControls({
     colorA: {
       value: "#000000",
@@ -100,7 +99,6 @@ function App() {
 
     metalness: { value: 0, min: 0, max: 1, step: 0.001 },
     roughness: { value: 0.5, min: 0, max: 1, step: 0.001 },
-    color: "#ffffff",
     transmission: { value: 0, min: 0, max: 1, step: 0.001 },
     ior: { value: 1.5, min: 0, max: 10, step: 0.001 },
     thickness: { value: 1.5, min: 0, max: 10, step: 0.001 },
@@ -125,6 +123,16 @@ function App() {
 
   const gltf = useGLTF(suzanne);
   const { nodes, materials } = useMemo(() => gltf, [gltf]);
+
+  useEffect(() => {
+    return () => {
+      // Cleanup resources when the component unmounts
+      if (ref.current) {
+        ref.current.geometry.dispose();
+        ref.current.material.dispose();
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -151,11 +159,13 @@ function App() {
           fragmentShader={fragmentShader}
           vertexShader={vertexShader}
           uniforms={uniforms}
-          color={color}
           metalness={metalness}
           roughness={roughness}
           transparent={transparent}
           wireframe={wireframe}
+          transmission={transmission}
+          ior={ior}
+          thickness={thickness}
         />
       </mesh>
 

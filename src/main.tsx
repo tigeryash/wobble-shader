@@ -8,6 +8,7 @@ import { Leva } from "leva";
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
     <Canvas
+      gl={{ antialias: true }}
       shadows
       camera={{
         fov: 45,
