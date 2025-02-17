@@ -20,8 +20,9 @@ import suzanne from "./public/suzanne.glb";
 // })();
 
 function App() {
-  const ref = useRef(null);
-  const materialRef = useRef<typeof CustomShaderMaterial | null>(null);
+  const ref = useRef<THREE.Mesh>(null);
+  //ts-ignore
+  const materialRef = useRef(null);
   const uniforms = useMemo(
     () => ({
       uTime: new THREE.Uniform(0),
@@ -129,7 +130,11 @@ function App() {
       // Cleanup resources when the component unmounts
       if (ref.current) {
         ref.current.geometry.dispose();
-        ref.current.material.dispose();
+        if (Array.isArray(ref.current.material)) {
+          ref.current.material.forEach((material) => material.dispose());
+        } else {
+          ref.current.material.dispose();
+        }
       }
     };
   }, []);
@@ -146,7 +151,7 @@ function App() {
       />
       <mesh
         ref={ref}
-        geometry={nodes.Suzanne.geometry}
+        geometry={(nodes.Suzanne as THREE.Mesh).geometry}
         material={materials["Material.001"]}
         castShadow
         customDepthMaterial={depthMaterial}
@@ -154,7 +159,7 @@ function App() {
         receiveShadow
       >
         <CustomShaderMaterial
-          ref={materialRef as any}
+          ref={materialRef}
           baseMaterial={THREE.MeshPhysicalMaterial}
           fragmentShader={fragmentShader}
           vertexShader={vertexShader}
